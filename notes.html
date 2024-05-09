@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./fonts/css/all.min.css">
+    <style>
+        .container{
+            max-width: unset;
+            padding: 5% 10%;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #cf9aff, #95c0ff);
+            color: #fff;
+        }
+        .notes h1{
+            font-size: 3rem;
+        }
+        .notes button{
+            margin: 1em 0 2em;
+            background: linear-gradient(#9418fd, #571094);
+            font-size: 1.125rem;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+        .input-box{
+            min-height: 10rem;
+            background: #fff;
+            padding: 1.5em;
+            outline: none;
+            border-radius: 5px;
+        }
+        .notes-content{
+            position: relative;
+            width: 50%;
+            max-width: 500px;
+            margin: 0 1em 1em 0;
+            color: #333;
+        }
+        .remove-btn{
+            position: absolute;
+            right: .5em;
+            top: .5em;
+            font-size: 18px;
+            padding: .5em;
+            cursor: pointer;
+            color: red;
+        }
+        @media(max-width: 768px){
+            .notes-content{
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="notes">
+            <h1>Notes</h1>
+            <button class="add-note"><i class="fa fa-edit mr-s"></i>Add Note</button>
+            <div class="notes-container flex flex-wrap">
+                <!-- <div class="notes-content">
+                    <p contenteditable="true" class="input-box">Hello World </p>
+                    <i class="fa fa-remove remove-btn"></i>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let notesContainer = document.querySelector(".notes-container");
+        let createBtn = document.querySelector(".add-note");
+        let notesInput = document.querySelectorAll(".input-box");
+
+        createBtn.addEventListener("click", function(){
+            let notesDiv = document.createElement("div");
+            notesDiv.classList.add("notes-content");
+            notesDiv.innerHTML = `<p contenteditable="true" class="input-box"></p><i class="fa fa-remove remove-btn"></i>`;
+            notesContainer.appendChild(notesDiv);
+            saveNotes();
+        });
+
+        notesContainer.addEventListener("click", function(e){
+            if(e.target.classList.contains("remove-btn")){
+                e.target.parentElement.remove();
+                saveNotes();
+            }else if(e.target.tagName === "P"){
+                let notez = document.querySelectorAll(".input-box");
+                notez.forEach((note) => {
+                    note.addEventListener("keyup", saveNotes)
+                })
+            }
+        });
+
+        function saveNotes(){
+            localStorage.setItem("notes", notesContainer.innerHTML);
+        }
+        function showNotes(){
+            notesContainer.innerHTML = localStorage.getItem("notes");
+        }
+        showNotes();
+    </script>
+</body>
+</html>

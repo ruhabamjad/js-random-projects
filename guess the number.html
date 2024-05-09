@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Guess the Number</title>
+<style>
+*,*::before,*::after{
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+html{
+font-size: 1rem;
+scroll-behaviour: smooth;
+}
+body{
+font-family: 'open sans',sans-serif;
+font-size: 1rem;
+font-weight: 400;
+color: #333;
+line-height: 1.5;
+height: 100%;
+background: #f5f7f9;
+}
+a{
+text-decoration: none;
+color: #00aa77;
+}
+h1,h2,h3,h4,h5,h6{
+line-height: 1.2;
+margin-bottom: 1rem;
+}
+p{
+margin-bottom: 1em;
+}
+ol,ul{
+padding-left: 2em;
+margin-bottom: 1em;
+}
+table{
+border: 1px solid #ddd;
+border-collapse: collapse;
+margin-bottom: 1em;
+}
+table th,
+table td{
+border: 1px solid #ddd;
+padding: .5em 1em;
+}
+form{
+background: #f3f3f3;
+padding: 1.5em;
+max-width: 400px;
+margin-bottom: 1em;
+}
+form > *{
+display: block;
+padding: .5em;
+width: 100%;
+margin-bottom: 1em;
+min-height: 2.5rem;
+}
+form label{
+margin-bottom: .5em;
+padding: 0;
+min-height: unset;
+}
+form [type='submit'],
+form [type='reset'],.button{
+display: inline-block;
+width: unset;
+min-height: unset;
+background: #00aa77;
+border: 0;
+color: #fff;
+padding: .8em 1em;
+cursor: pointer;
+margin-bottom: unset;
+}
+form [type='reset']{
+background: #ff3300;
+margin-left: .5em;
+}
+.container{
+max-width: 1100px;
+margin: 0 auto;
+background: #fff;
+padding: 2em;
+}
+</style>
+</head>
+<body>
+<div class='container'>
+
+<h1>Guess the Number</h1>
+<p>Enter One Number Below Between 1 and 100 to Guess th Right Number.</p>
+<p>You have 10 Attempts to Guess the Right Number.</p>
+
+<form>
+<label>Guess a Number</label><input type="text" placeholder="Enter a Number..." id='userInput'>
+<button type="submit" id="submit">Submit</button>
+<button type="Reset" id="submit">Reset</button>
+</form>
+
+<div class='resultParas'>
+<p>Previous Guesses : <span class='prevGuesses'></span></p>
+<p>Remaining Guesses : <span class='remainingGuess'>10</span></p>
+<p class='lowOrHi'></p>
+</div>
+
+</div>
+</body>
+
+<script>
+
+let randomNumber = parseInt(Math.random()*100+1);
+
+const submit = document.getElementById('submit');
+const userInput = document.querySelector('#userInput');
+let prevGuessesSpan = document.querySelector('.prevGuesses');
+let remainingGuess = document.querySelector('.remainingGuess');
+const lowOrHi = document.querySelector('.lowOrHi');
+const resultParas = document.querySelector('.resultParas');
+
+const para = document.createElement('p');
+
+let numOfGuess = 1;
+let playGame = true;
+
+if(playGame){
+submit.addEventListener('click',function(e){
+e.preventDefault();
+const userGuess = parseInt(userInput.value.trim());
+//console.log(userGuess);
+validateGuess(userGuess);
+});
+}
+
+function validateGuess(guess){
+
+if(isNaN(guess) || guess < 0 || guess === 0 || !guess){
+alert("Please Enter a Valid Number Between 1 and 100.");
+}else if(guess > 100){
+alert('Please Enter a Number Less Than 100.');
+}else{
+//console.log(prevGuess);
+if(numOfGuess >= 11){
+displayGuess(guess);
+displayMessage(`Game Over, The Correct Number was : ${randomNumber}`);
+endGame();
+}else{
+displayGuess(guess);
+checkGuess(guess);
+}
+
+}
+
+}
+
+function checkGuess(guess){
+
+if(guess === randomNumber){
+displayMessage("Hurray!. You have Won this Game.");
+endGame();
+}else if(guess < randomNumber){
+displayMessage("Ooops, The Number is toooo Low");
+}else if(guess > randomNumber){
+displayMessage("Ooops, The Number is toooo High");
+}
+
+}
+
+function displayGuess(guess){
+userInput.value = "";
+prevGuessesSpan.innerHTML += ` ${guess},`;
+numOfGuess++;
+remainingGuess.innerHTML = `${11 - numOfGuess}`;
+}
+
+function displayMessage(message){
+lowOrHi.innerHTML = `<h2>${message}</h2>`;
+}
+
+function endGame(){
+userInput.value = "";
+userInput.setAttribute('disabled','disabled');
+para.classList.add('button');
+para.innerHTML = `<b id='startNewGame'>Start New Game</b>`;
+resultParas.appendChild(para);
+playGame = false;
+newGame();
+}
+
+function newGame(){
+
+let newGameBtn = document.querySelector('#startNewGame');
+newGameBtn.addEventListener('click',function(e){
+randomNumber = parseInt(Math.random()*100+1);
+prevGuessesSpan.innerHTML = "";
+numOfGuess = 1;
+userInput.innerHTML = "";
+remainingGuess.innerHTML = `${11-numOfGuess}`;
+userInput.removeAttribute('disabled');
+resultParas.removeChild(para);
+playGame = true;
+
+});
+}
+
+</script>
+
+</html>

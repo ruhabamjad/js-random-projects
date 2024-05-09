@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javascript Crud</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./fonts/css/all.min.css">
+    <style>
+        body{
+            background: #eee;
+        }
+        #form textarea{min-height: 15rem;}
+        .post p{
+            white-space: pre-wrap;
+        }
+        .post i{
+            cursor: pointer;
+            padding: .5em;
+        }
+        #modal{
+            position: absolute;
+            top: -600px;
+            left: 50%;
+            width: 100%;
+            transform: translateX(-50%);
+            background: var(--light-color);
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 2em;
+            border-radius: .5em;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            scale: .5;
+            transition: .3s ease;
+            z-index: 9;
+        }
+        #modal h3{
+            margin-bottom: .5em;
+        }
+        form input,
+        form textarea{
+            margin-top: .5em;
+            margin-bottom: .5em;
+        }
+        .show-modal{
+            top: 2em!important;
+            scale: 1!important;
+        }
+        .container{
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            background: var(--light-color);
+            padding: 2em;
+            border-radius: .5em;
+        }
+        .heading{font-weight: 500;}
+        .actions{
+            top: 1em;
+            right: 1em;
+        }
+        .actions i{
+            padding: .5em;
+            cursor: pointer;
+        }
+        .fa-remove{font-size: 1.2rem;}
+    </style>
+</head>
+<body>
+    <!-- <div class="container">
+        <h1 class="my-s text-center">Simple Social Media</h1>
+        <div class="flex gap-2">
+            <div class="width-40">
+                <form action="#" id="form">
+                <textarea id="form-input" placeholder="Add Post"></textarea>
+                <div class="my-1" id="msg"></div>
+                <button type="submit" class="bg-main color-light">Post</button>
+            </form>
+            </div>
+            <div class="width-60">
+                <div id="posts">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let form = document.getElementById("form");
+        let postContainer = document.getElementById("posts");
+        let inputText = document.getElementById("form-input");
+        let msgBox = document.getElementById("msg");
+        let data = {};
+
+        form.addEventListener("submit", (e)=>{
+            e.preventDefault();
+            validateInput();
+        })
+        function validateInput(){
+            if(inputText.value === ""){
+                msgBox.innerHTML = "Please Enter Something to post.";
+            }else{
+                msgBox.innerHTML = "";
+                data["post"] = inputText.value;
+                inputText.value = "";
+                createPost();
+            }
+        }
+        function createPost(){
+            postContainer.innerHTML += `<div class="post flex justify-between bg-body pd-2 radius-s mb-1">
+                <p>${data.post}</p>
+                <span>
+                    <i onclick="editPost(this)" class="fa fa-edit edit-btn"></i>
+                    <i onclick="deletePost(this);" class="fa fa-remove remove-btn"></i>
+                    </span>
+                    </div>`;
+        }
+        function deletePost(e){
+            e.parentElement.parentElement.remove();
+        }
+        function editPost(e){
+            inputText.value = e.parentElement.previousElementSibling.textContent;
+            e.parentElement.parentElement.remove();
+        }
+    </script> -->
+
+<div class="container relative">
+<h1>Tasks Manager</h1>
+    <div id="modal">
+        <h3>Add Task</h3>
+        <form action="#" id="form">
+            <input type="text" id="text" placeholder="Task Name">
+            <div id="msg"></div>
+            <input type="date" id="date">
+            <textarea id="description" placeholder="Description"></textarea>
+            <button type="submit" class="bg-main color-light">Add</button>
+            <button id="close-modal">Close</button>
+        </form>
+    </div>
+
+    <button id="add-task" class="my-1 bg-main color-light">Add Task</button>
+
+    <div id="tasks">
+        <!-- <div class="task pd-1 radius-5px bg-body">
+            <p class="font-xl heading">This is the Task No 1</p>
+            <p class="my-1">2024-23-03</p>
+            <p>And this is the task description a little bit long shong</p>
+        </div> -->
+    </div>
+
+</div>
+
+<script>
+    let form = document.getElementById("form");
+    let modal = document.getElementById("modal");
+    let addTask = document.getElementById("add-task");
+    let closeModal = document.getElementById("close-modal");
+    let taskContainer = document.getElementById("tasks");
+    let taskText = document.getElementById("text");
+    let taskDate = document.getElementById("date");
+    let description = document.getElementById("description");
+    let msg = document.getElementById("msg");
+    let data = {};
+
+    addTask.addEventListener("click", ()=>{
+        modal.classList.add("show-modal");
+    })
+    closeModal.addEventListener("click", (e)=>{
+        e.preventDefault();
+        modal.classList.remove("show-modal");
+    })
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if(taskText.value === ""){
+            msg.innerHTML = "Please Add Task First.";
+        }else{
+            msg.innerHTML = "";
+            data["text"] = taskText.value;
+            data["date"] = taskDate.value;
+            data["description"] = description.value;
+            addItems();
+        }
+    })
+    function addItems(){
+        taskContainer.innerHTML += `<div class="task pd-1 radius-5px bg-body mb-1 relative">
+            <p class="font-xl heading">${data["text"]}</p>
+            <p class="my-1">${data["date"]}</p>
+            <p>${data["description"]}</p>
+            <span class="absolute actions"><i onclick="editTask(this);" class="fa fa-edit"></i><i onclick="removeTask(this);" class="fa fa-remove"></i></span>
+        </div>`;
+        modal.classList.remove("show-modal");
+        resetForm();
+        saveTasks();
+    }
+    function resetForm(){
+        taskText.value = "";
+        taskDate.value = "";
+        description.value = "";
+    }
+    function removeTask(e){
+        e.parentElement.parentElement.remove();
+        saveTasks();
+    }
+    function editTask(e){
+        modal.classList.add("show-modal");
+        let currentTask = e.parentElement.parentElement;
+        taskText.value = currentTask.children[0].textContent;
+        taskDate.value = currentTask.children[1].textContent;
+        description.value = currentTask.children[2].textContent;
+        currentTask.remove();
+        saveTasks();
+    }
+    function saveTasks(){
+        localStorage.setItem("tasks", JSON.stringify(taskContainer.innerHTML));
+    }
+    function showTasks(){
+        taskContainer.innerHTML = JSON.parse(localStorage.getItem("tasks"));
+    }
+    showTasks();
+</script>
+</body>
+</html>

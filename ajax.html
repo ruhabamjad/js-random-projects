@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax</title>
+    <link rel="stylesheet" href="./style.css">
+    <style>
+        .todo {
+            background: #f3f7f9;
+            padding: 1.5em;
+            border-radius: 5px;
+            margin: 1em 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-2">
+        <button class="load-data">Load Data</button>
+
+        <div class="data-container"></div>
+    </div>
+
+    <script>
+        let loadBtn = document.querySelector(".load-data");
+        let dataContainer = document.querySelector(".data-container");
+        let url = "https://jsonplaceholder.typicode.com/posts";
+
+        loadBtn.addEventListener("click", (e) => {
+            loadBtn.innerText = "Loading...";
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", url, true);
+
+            // xhr.onreadystatechange = function(){
+
+            //     if(xhr.readyState === 3){
+            //         loadBtn.innerText = "Loading...";
+            //         console.log("hi");
+            //     }
+
+            //     xhr.onprogress = function(){
+            //         console.log("hi");
+            //     }
+
+            //     if(xhr.readyState === 4 && xhr.status === 200){
+            //         // console.log(this.response);
+            //         let data = JSON.parse(this.response);
+            //         data.forEach((item) => {
+            //             let todo = document.createElement("div");
+            //             todo.classList.add("todo");
+            //             let title = document.createElement("h3");
+            //             let description = document.createElement("p");
+            //             title.innerText = item.title;
+            //             description.innerText = item.body;
+            //             todo.appendChild(title);
+            //             todo.appendChild(description);
+            //             dataContainer.appendChild(todo);
+            //         })
+            //         loadBtn.innerText = "Data Loaded";
+            //     }
+
+            // }
+
+            // xhr.onload = function () {
+            //     let data = JSON.parse(this.response);
+            //     data.forEach((item) => {
+            //         let todo = document.createElement("div");
+            //         todo.classList.add("todo");
+            //         let title = document.createElement("h3");
+            //         let description = document.createElement("p");
+            //         title.innerText = item.title;
+            //         description.innerText = item.body;
+            //         todo.appendChild(title);
+            //         todo.appendChild(description);
+            //         dataContainer.appendChild(todo);
+            //     });
+            //     loadBtn.innerText = "Data Loaded";
+            // }
+            
+            // xhr.send();
+
+            // Fetch API Usage
+            fetch(url)
+            .then((data) => {
+                return data.json();
+            })
+            .then(response => {
+                response.forEach(item => {
+                    // console.log(item)
+                    let todo = document.createElement("div");
+                    todo.classList.add("todo");
+                    let title = document.createElement("h3");
+                    let description = document.createElement("p");
+                    title.innerText = item.title;
+                    description.innerText = item.body;
+                    todo.appendChild(title);
+                    todo.appendChild(description);
+                    dataContainer.appendChild(todo);
+                });
+                    loadBtn.innerText = "Data Loaded";
+            })
+
+        })
+    </script>
+</body>
+
+</html>

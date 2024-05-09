@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Clock</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container my-3">
+        <h1 id="showTime">00 : 00 : 00</h1>
+    </div>
+
+    <script>
+        let showTime = document.getElementById("showTime");
+        let fullTime, hours, minutes, seconds, currentTime = null;
+        
+        function makeTime(){
+            currentTime = new Date();
+            hours = currentTime.getHours();
+            minutes = currentTime.getMinutes();
+            seconds = currentTime.getSeconds();
+            if(hours > 12){hours = 1;}
+            let fullDate = currentTime.toLocaleDateString();
+            fullTime = `${hours} : ${minutes} : ${seconds} - ${fullDate}`;
+            showTime.innerHTML = fullTime;
+        }
+        setInterval(makeTime, 1000);
+    </script>
+</body>
+</html>

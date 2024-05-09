@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javascript Tabs</title>
+    <style>
+        *,*::before,
+        *::after{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            font-family: "Poppins", sans-serif;
+            font-size: 1rem;
+            font-weight: 400;
+            color: #333;
+            line-height: 1.5;
+        }
+        button{
+            border: 0;
+            outline: 0;
+            display: inline-block;
+            padding: .5em 1em;
+            background: #eee;
+            cursor: pointer;
+        }
+        .tabs-container{
+            max-width: 500px;
+            margin: 2em auto;
+        }
+        .tabs{
+            background: #333;
+            padding: 1em;
+        }
+        .tabs button{
+            margin-right: .5em;
+            background: #fff;
+        }
+        .tab-content{
+            background: #f3f7f9;
+            padding: 1.5em;
+            display: none;
+        }
+        .tab-content.active{
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="tabs-container">
+    <div class="tabs">
+        <button class="tab-btns" data-tab="tab1">Tab 1</button>
+        <button class="tab-btns" data-tab="tab2">Tab 2</button>
+        <button class="tab-btns" data-tab="tab3">Tab 3</button>
+    </div>
+    <div class="tab-content" id="tab1">
+        <h2>Tab 1</h2>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea voluptas, tempora neque fugiat non voluptatibus sunt quo fugit placeat natus, similique corrupti voluptate ipsam. Cupiditate ducimus corrupti facere. Fugit, laudantium.</p>
+    </div>
+    <div class="tab-content" id="tab2">
+        <h2>Tab 2</h2>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, corrupti voluptatem doloremque sint laboriosam reiciendis soluta suscipit fugiat eius asperiores, ullam autem rem! Natus ex quia illum sunt sit dolorem hic voluptates unde accusantium aut.</p>
+    </div>
+    <div class="tab-content" id="tab3">
+        <h2>Tab 3</h2>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officiis vel, aliquid possimus quis beatae eligendi, sed quam dicta minus ad reprehenderit. Corporis eius, hic placeat quas porro velit neque atque quae mollitia ullam, doloribus alias libero vitae est, ipsa aut!
+        </p>
+    </div>
+</div>
+
+<script>
+    const tabBtns = document.querySelectorAll(".tab-btns");
+    let tabContents = document.querySelectorAll(".tab-content");
+
+    tabBtns.forEach((btn, index) => {
+        btn.addEventListener("click", (e) => {
+            let tabData = e.target.dataset.tab;
+            let tabContent = document.getElementById(tabData);
+            tabContents.forEach((tabC) => {
+                tabC.style.display = "none";
+            });
+            tabContent.style.display = "block";
+        });
+    });
+
+    tabBtns[0].click();
+</script>
+</body>
+</html>

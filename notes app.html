@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Notes App</title>
+<style>
+*,*::before,*::after{
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+html{
+font-size: 1rem;
+scroll-behavior: smooth;
+}
+body{
+font-family: 'lato',sans-serif;
+font-size: 1rem;
+font-weight: 400;
+color: #333;
+line-height: 1.5;
+height: 100%;
+background: #f5f7f9;
+}
+img{
+max-width: 100%;
+background-size: cover;
+background-repeat: no-repeat;
+}
+a{
+text-decoration: none;
+color: inherit;
+}
+a:hover{color: #00aa77}
+h1,h2,h3,h4,h5,h6{
+line-height: 1.2;
+margin-bottom: 1rem;
+font-weight: 500;
+}
+p{
+margin-bottom: 1em;
+}
+ol,ul{
+padding-left: 2em;
+margin-bottom: 1em;
+}
+table{
+border: 1px solid #ddd;
+border-collapse: collapse;
+margin-bottom: 1em;
+}
+table th,
+table td{
+border: 1px solid #ddd;
+padding: .5em 1em;
+}
+form{
+background: #f3f3f3;
+padding: 1.5em;
+max-width: 400px;
+margin-bottom: 1em;
+}
+form > *{
+display: block;
+padding: .5em;
+width: 100%;
+margin-bottom: 1em;
+min-height: 2.5rem;
+}
+input[type='number']{
+min-height: 2.5rem;
+padding: .5em;
+}
+form input[type='submit']{
+display: inline-block;
+width: unset;
+min-height: unset;
+background: #00aa77;
+border: 0;
+color: #fff;
+padding: .8em 1em;
+cursor: pointer;
+margin-bottom: unset;
+}
+button{
+all: unset;
+display: inline-block;
+margin-top: .5em;
+background: #333;
+color: #fff;
+padding: .5em 1em;
+cursor: pointer;
+}
+.container{
+max-width: 1100px;
+margin: 0 auto;
+background: #fff;
+padding: 0 2em 2em;
+}
+nav{
+height: 60px;
+background: #f3f3f3;
+margin-bottom: 1em;
+line-height: 60px;
+}
+nav ul{
+display: flex;
+list-style: none;
+padding: 0;
+align-items: center;
+}
+nav ul li a{
+display: inline-block;
+color: #000;
+padding: 0 1em;
+}
+.notes{
+display: flex;
+flex-wrap: wrap;
+}
+.note{
+width: 30%;
+border: 1px solid #333;
+margin: 1em 1em 0 0;
+height: 15rem;
+overflow: hidden;
+}
+.note textarea{
+width: 100%;
+height: 100%;
+border: none;
+resize: none;
+padding: .5em;
+font-size: 1.125rem;
+}
+.note textarea:focus{
+border: 0;
+outline: 0;
+}
+.note .toolbar{
+background: #eee;
+padding: 5px;
+display: flex;
+justify-content: end;
+}
+.toolbar span{
+margin-right: .5em;
+cursor: pointer;
+}
+.save{color: #00aa00;}
+.delete{color: #dd0000;}
+</style>
+</head>
+<body class='post-body'>
+<div class='container'>
+
+<nav>
+<ul>
+<li><a href="./">Home</a></li>
+<li><a href="./">About</a></li>
+<li><a href="./">Contact</a></li>
+<li><a href="./">Services</a></li>
+<li><a href="./">Blog</a></li>
+<li><a href="./">_Pages</a></li>
+</ul>
+</nav>
+
+<h1>Notes App</h1>
+
+<button id='addNote'>Add Note</button>
+<div class='notes'>
+<!--
+<div class='note'>
+<div class='toolbar'><span class='save'>Save</span><span class='delete'>Delete</span></div>
+<textarea></textarea>
+</div>
+-->
+</div>
+
+</div>
+</body>
+
+<script>
+
+//Selectors
+const addButton = document.querySelector('#addNote');
+const notes = document.querySelector('.notes');
+
+const saveNotes = () => {
+const notes = document.querySelectorAll('.note textarea');
+const noteData = [];
+notes.forEach((note) => noteData.push(note.value));
+if(noteData === 0){
+localStorage.removeItem('notes');
+}else{
+localStorage.setItem("notes", JSON.stringify(noteData));
+}
+}
+
+addButton.addEventListener('click', addNote);
+
+function addNote(text = ""){
+const note = document.createElement('div');
+note.classList.add('note');
+note.innerHTML = `<div class='toolbar'><span class='save'>Save</span><span class='delete'>Delete</span></div>
+<textarea>${text}</textarea>`;
+note.querySelector('textarea').addEventListener('focusout', function(){
+saveNotes();
+});
+notes.appendChild(note);
+saveNotes();
+
+note.querySelector('.delete').addEventListener('click', function(){
+note.parentElement.removeChild(note);
+saveNotes();
+});
+
+note.querySelector('.save').addEventListener('click', saveNotes);
+
+}
+
+(function(){
+let isNotes = JSON.parse(localStorage.getItem('notes'));
+if(isNotes === null){
+addNote();
+}else{
+isNotes.forEach((isNote) => {
+addNote(isNote);
+});}
+})();
+
+</script>
+
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./fonts/css/all.min.css">
+    <style>
+        body{
+            font-size: 1.125rem;
+        }
+        .color-danger{
+            color: #d31e1e;
+        }
+        #todo-container li{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--body-bg);
+            padding: .5em 1em;
+            margin-bottom: .5em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .checked{
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-content bg-light-grey pd-2 my-2 radius-5px">
+            <form action="#" class="flex" id="todo-form">
+                <input type="text" id="todo-input" placeholder="Add Todo">
+                <button type="submit" class="bg-main color-light">Submit</button>
+            </form>
+        </div>
+</div>
+
+<div class="container">
+    <ul id="todo-container">
+    </ul>
+</div>
+
+<script>
+let inputTodo = document.getElementById("todo-input");
+let todoContainer = document.getElementById("todo-container");
+let todoForm = document.getElementById("todo-form");
+
+todoForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    
+    if(inputTodo.value !== ""){
+        let todoText = inputTodo.value;
+        let li = document.createElement("li");
+        li.innerHTML = `${todoText} <span class="color-danger delete-btn cursor-pointer pd-5px"><i class="fa fa-remove"></i></span>`;
+        todoContainer.appendChild(li);
+        inputTodo.value = "";
+        saveData();
+    }else{
+        alert("Please add some text in the input field.")
+    }
+});
+
+todoContainer.addEventListener("click", (e) => {
+    if(e.target.tagName === "LI"){
+        e.target.classList.toggle("checked");
+        saveData();
+    }else if(e.target.tagName === "I"){
+        e.target.parentNode.parentNode.remove();
+        saveData();
+    }
+}, false);
+
+function saveData(){
+    localStorage.setItem("listData", todoContainer.innerHTML);
+}
+
+function showData(){
+    todoContainer.innerHTML = localStorage.getItem("listData");
+}
+
+showData();
+
+
+</script>
+</body>
+</html>
